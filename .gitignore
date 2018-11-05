@@ -26,6 +26,8 @@ hs_err_pid*
 
 #ignore the .idea dir
 .idea/
+#ignore the .iml files extension
+*.iml
 #ignore the out dir
 out/
 
