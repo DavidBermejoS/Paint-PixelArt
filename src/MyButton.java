@@ -2,9 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Map;
 
-public class MyButton extends JButton implements ActionListener {
+public class MyButton extends JButton implements ActionListener, MouseListener {
 
     JPanel panelVinculate;
     Color color = Color.BLACK;
@@ -20,11 +22,41 @@ public class MyButton extends JButton implements ActionListener {
 
         this.panelVinculate = panelVinculate;
         this.addActionListener(this);
+        this.addMouseListener(this);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         this.panelVinculate.setBackground(color);
+    }
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(SwingUtilities.isRightMouseButton(e)){
+            Color newColor = JColorChooser.showDialog(null,"Elige un color",this.color);
+            this.color = newColor;
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
