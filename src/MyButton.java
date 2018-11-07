@@ -36,7 +36,9 @@ public class MyButton extends JButton implements ActionListener, MouseListener {
     public void mouseClicked(MouseEvent e) {
         if(SwingUtilities.isRightMouseButton(e)){
             Color newColor = JColorChooser.showDialog(null,"Elige un color",this.color);
-            this.color = newColor;
+            if(newColor!=null){
+                this.color = newColor;
+            }
         }
     }
 
