@@ -97,7 +97,7 @@ public class Window {
         buttons = new MyButton[4][4];
         for (int i = 0; i < buttons.length; i++) {
             for (int j = 0; j < buttons[i].length; j++) {
-                buttons[i][j] = new MyButton(pixels[i][j],i,j);
+                buttons[i][j] = new MyButton(frame, pixels[i][j],i,j);
                 buttonPanel.add(buttons[i][j]);
             }
 
