@@ -1,5 +1,9 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -8,7 +12,7 @@ import java.awt.*;
  * @author David Bermejo Simon
  * @since 1.2.0
  **/
-public class DialogSelectorColor extends JDialog {
+public class DialogSelectorColor extends JDialog implements ChangeListener, ActionListener {
     int red;
     int green;
     int blue;
@@ -26,9 +30,9 @@ public class DialogSelectorColor extends JDialog {
     JSlider greenSlider;
 
     JPanel colorMuestra;
+    Color colorReturn;
 
     JButton okButton;
-
 
 
     MyButton bAffected;
@@ -54,12 +58,15 @@ public class DialogSelectorColor extends JDialog {
     }
 
 
-
+    /**
+     * Metodo encargado de inicializar los componentes en la interfaz
+     */
     public void addComponents(){
         this.setLayout(new GridBagLayout());
         GridBagConstraints settings = new GridBagConstraints();
 
         //config valor red
+        //label red
         labelRed = new JLabel("Cantidad de Rojo");
         settings = new GridBagConstraints();
         settings.gridy=0;
@@ -69,7 +76,7 @@ public class DialogSelectorColor extends JDialog {
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(labelRed,settings);
 
-
+        //slider red
         redSlider = new JSlider();
         redSlider.setMajorTickSpacing(10);
         redSlider.setMinorTickSpacing(0);
@@ -86,8 +93,9 @@ public class DialogSelectorColor extends JDialog {
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(redSlider,settings);
 
-
-        redSpinner = new JSpinner();
+        //spinner red
+        SpinnerModel sm1 = new SpinnerNumberModel(0, 0, 255, 1);
+        redSpinner = new JSpinner(sm1);
         settings = new GridBagConstraints();
         settings.gridy=2;
         settings.gridx=0;
@@ -100,6 +108,7 @@ public class DialogSelectorColor extends JDialog {
 
 
         // config valor green
+        //label green
         labelGreen = new JLabel("Cantidad de Verde");
         settings = new GridBagConstraints();
         settings.gridy=3;
@@ -108,7 +117,7 @@ public class DialogSelectorColor extends JDialog {
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(labelGreen,settings);
 
-
+        //slider green
         greenSlider = new JSlider();
         greenSlider.setMajorTickSpacing(10);
         greenSlider.setMinorTickSpacing(0);
@@ -118,14 +127,14 @@ public class DialogSelectorColor extends JDialog {
         greenSlider.setPaintLabels(false);
         settings = new GridBagConstraints();
         settings.gridy=4;
-
         settings.ipadx=10;
         settings.ipady=10;
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(greenSlider,settings);
 
-
-        greenSpinner = new JSpinner();
+        //spinner green
+        SpinnerModel sm2 = new SpinnerNumberModel(0, 0, 255, 1);
+        greenSpinner = new JSpinner(sm2);
         settings = new GridBagConstraints();
         settings = new GridBagConstraints();
         settings.gridy=5;
@@ -135,7 +144,9 @@ public class DialogSelectorColor extends JDialog {
         this.add(greenSpinner,settings);
 
 
+
         // config valor blue
+        //label blue
         labelBlue = new JLabel("Cantidad de Azul");
         settings = new GridBagConstraints();
         settings = new GridBagConstraints();
@@ -145,7 +156,7 @@ public class DialogSelectorColor extends JDialog {
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(labelBlue,settings);
 
-
+        //blue slider
         blueSlider = new JSlider();
         blueSlider.setMajorTickSpacing(10);
         blueSlider.setMinorTickSpacing(0);
@@ -160,14 +171,16 @@ public class DialogSelectorColor extends JDialog {
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(blueSlider,settings);
 
-
-        blueSpinner = new JSpinner();
+        //blue spinner
+        SpinnerModel sm3 = new SpinnerNumberModel(0, 0, 255, 1);
+        blueSpinner = new JSpinner(sm3);
         settings = new GridBagConstraints();
         settings.gridy=8;
         settings.ipadx=10;
         settings.ipady=10;
         settings.fill = GridBagConstraints.HORIZONTAL;
         this.add(blueSpinner,settings);
+
 
 
         //panel que muestra el color.
@@ -183,6 +196,7 @@ public class DialogSelectorColor extends JDialog {
         this.add(colorMuestra,settings);
 
 
+
         //boton aceptar
         okButton = new JButton("Ok!");
         settings.gridy=10;
@@ -193,8 +207,61 @@ public class DialogSelectorColor extends JDialog {
     }
 
     public void addListener(){
+        redSlider.addChangeListener(this);
+        greenSlider.addChangeListener(this);
+        blueSlider.addChangeListener(this);
+
+        redSpinner.addChangeListener(this);
+        greenSpinner.addChangeListener(this);
+        blueSpinner.addChangeListener(this);
+
+        okButton.addActionListener(this);
 
     }
 
 
+    /**
+     * Metoodo encargado de recibir los cambios de los Sliders
+     * @param e : evento iniciado
+     */
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if(e.getSource() instanceof JSlider){
+            red = redSlider.getValue();
+            blue = blueSlider.getValue();
+            green = greenSlider.getValue();
+            redSpinner.setValue(red);
+            blueSpinner.setValue(blue);
+            greenSpinner.setValue(green);
+            colorReturn = new Color (red,green,blue);
+            colorMuestra.setBackground(colorReturn);
+        }
+        else if(e.getSource() instanceof JSpinner){
+            red = (Integer) redSpinner.getValue();
+            blue = (Integer)blueSpinner.getValue();
+            green = (Integer)greenSpinner.getValue();
+            redSlider.setValue(red);
+            blueSlider.setValue(blue);
+            greenSlider.setValue(green);
+            colorReturn = new Color (red,green,blue);
+            colorMuestra.setBackground(colorReturn);
+        }
+
+    }
+
+    /**
+     * Metodo que se encarga de devolver el color al botón que activo el dialogo
+     */
+    public void returnColor(){
+        if(this.colorReturn!=null){
+            this.bAffected.color=this.colorReturn;
+        }
+        dispose();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        returnColor();
+    }
 }
