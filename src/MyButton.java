@@ -66,7 +66,6 @@ public class MyButton extends JButton implements ActionListener, MouseListener {
         }
         if(SwingUtilities.isMiddleMouseButton(e)){
             DialogSelectorColor selector = new DialogSelectorColor((JButton)e.getSource(), windowParent, "Elige el color", true);
-            selector.startDialog();
 
         }
     }
